@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
         mUrlDisplayTextView = findViewById(R.id.tv_url_display)
         mSearchResultsTextView = findViewById(R.id.tv_github_search_results_json)
     }
-    // COMPLETED (2) Create a method called makeGithubSearchQuery
-    // COMPLETED (3) Within this method, build the URL with the text from the EditText and set the built URL to the TextView
     /**
      * This method retrieves the search text from the EditText, constructs
      * the URL (using {@link NetworkUtils}) for the github repository you'd like to find, displays
@@ -36,8 +34,20 @@ class MainActivity : AppCompatActivity() {
 
     fun makeGithubSearchQuery() {
         val githubQuery = mSearchBoxEditText.text.toString()
-        val url = NetWorkUtils.buildUrl(githubQuery)
-        mUrlDisplayTextView.text = url.toString()
+        val githubSearchUrl = NetWorkUtils.buildUrl(githubQuery)
+        mUrlDisplayTextView.text = githubSearchUrl.toString()
+
+        // COMPLETED (2) Call getResponseFromHttpUrl and display the results in mSearchResultsTextView
+        // COMPLETED (3) Surround the call to getResponseFromHttpUrl with a try / catch block to catch an IO Exception
+        var githubSearchResults: String? = null
+        try {
+            if (githubSearchUrl != null) {
+                githubSearchResults = NetWorkUtils.getResponseFromHttpUrl(githubSearchUrl)
+                mSearchResultsTextView.text = githubSearchResults
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
@@ -46,8 +56,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
-            // COMPLETED (4) Remove the Toast message when the search menu item is clicked
-            // COMPLETED (5) Call makeGithubSearchQuery when the search menu item is clicked
             makeGithubSearchQuery()
             return true
         }
