@@ -1,5 +1,6 @@
 package com.big0.chung.lesson02_github_repo_search.utilities
 
+import android.net.Uri
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -23,7 +24,19 @@ class NetWorkUtils {
          * @return The URL to use to query the weather server.
          */
 
-        fun buildUrl(githubSearchQuery: String): URL? = null
+        fun buildUrl(githubSearchQuery: String): URL? {
+            val builtUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
+                    .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
+                    .appendQueryParameter(PARAM_SORT, sortBy)
+                    .build()
+            var url: URL? = null
+            try {
+                url = URL(builtUri.toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return url
+        }
 
         /**
          * This method returns the entire result from the HTTP response.
